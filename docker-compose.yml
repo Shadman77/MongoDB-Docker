@@ -1,18 +1,34 @@
-# Use root/example as user/password credentials
 version: '3.1'
 
 services:
 
   mongo:
-    image: mongo
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: test
     volumes:
       - ./data:/data/db:rw
     ports:
       - 27017:27017
+    command: ["mongod", "--auth"]
+
+  mongo-init:
+    image: mongo
+    restart: on-failure
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: admin
+    command: >
+      mongo admin
+      --host mongo
+      -u root -p 123456
+      --eval "db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'admin'}]})"
 
   mongo-express:
     image: mongo-express

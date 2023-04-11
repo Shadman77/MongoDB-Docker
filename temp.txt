@@ -1,0 +1,5 @@
+echo "deb [ arch=amd64,arm64 signed=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+apt-get update
+apt-get install -y mongodb-mongosh
+
+mongosh admin --host mongo -u root -p 123456 --eval "db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'admin'}]})"
