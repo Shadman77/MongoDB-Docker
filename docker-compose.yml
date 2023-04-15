@@ -28,7 +28,8 @@ services:
       mongosh admin
       --host mongo
       -u root -p 123456
-      --eval "db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'admin'}]})"
+      --eval "db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'shadman_dev'}]})"
+# The role only applies to the db shadman_dev
 
   mongo-express:
     image: mongo-express
