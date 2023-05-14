@@ -25,11 +25,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 123456
       MONGO_INITDB_DATABASE: admin
     command: >
-      mongosh admin
-      --host mongo
-      -u root -p 123456
-      --eval "db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'admin'}]})"
-# The role only applies to the db shadman_dev
+      mongosh --host mongo -u root -p 123456 --eval "
+      db.getSiblingDB('test').createCollection('test'); 
+      db.createUser({user: 'shadman', pwd: '12345678', roles: [{role: 'readWriteAnyDatabase', db: 'admin'}]}); 
+      db.grantRolesToUser('shadman', [{role: 'readWrite', db: 'test'}]);
+      "
+
 
   mongo-express:
     image: mongo-express
